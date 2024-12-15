@@ -3,9 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require('mongoose'); // mongoDB connection
 const Student = require('./models/student.model');
-const Subjects = require('./models/subjects.model')
-const multer = require('multer') // for file uploads
-mongoose.connect('mongodb://127.0.0.1:27017/ETFDB');
+const Subjects = require('./models/subjects.model');
+const Results = require('./models/results.model');
+mongoose.connect('mongodb://127.0.0.1:27017/SCUStudents');
 
 var app = express();
 app.use(cors());
