@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
+//member 6
 
 // Insert student
 app.post('/students/register', async (req, res) =>{
