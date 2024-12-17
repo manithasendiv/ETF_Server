@@ -18,39 +18,31 @@ app.get("/", (req, res) => {
 
 // Find by First name
 app.get("/students/searchFirstName/:searchValue", async (req, res) => {
-  let value = req.params.searchValue;
   try {
-    const students = await Student.find({ firstName: value });
+    const students = await Student.find({ firstName: req.params.searchValue });
     if (students.length > 0) {
-      res.send({ status: 200, message: students });
+      res.status(200).json(students);
     } else {
-      res.send({
-        status: 400,
-        message: "No students found with that first name",
-      });
+      res.status(404).json({ message: "Student not found!" });
     }
   } catch (error) {
-    console.log(error.message);
-    res.json({ status: "error", message: "Student not found" });
+    res.status(500).json({ message: "Error finding student", error });
   }
 });
 
 // Find by Last name
 app.get("/students/searchLastName/:searchValue", async (req, res) => {
-  let value = req.params.searchValue;
   try {
-    const students = await Student.find({ lastName: value });
+    const students = await Student.find({ lastName: req.params.searchValue });
     if (students.length > 0) {
-      res.send({ status: 200, message: students });
+      res.status(200).json(students);
     } else {
-      res.send({
-        status: 400,
-        message: "No students found with that first name",
-      });
+      res
+        .status(404)
+        .json({ message: "No students found with that first name" });
     }
   } catch (error) {
-    console.log(error.message);
-    res.json({ status: "error", message: "Student not found" });
+    res.status(500).json({ message: "Student not found", error });
   }
 });
 
