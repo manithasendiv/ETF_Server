@@ -1,48 +1,60 @@
-var express = require("express");
+var express = require("express"); // import express
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const mongoose = require('mongoose'); // mongoDB connection
+const mongoose = require('mongoose'); // MongoDB import
 const Student = require('./models/student.model');
 const Subjects = require('./models/subjects.model');
 const Results = require('./models/results.model');
-mongoose.connect('mongodb://127.0.0.1:27017/SCUStudents');
+mongoose.connect('mongodb://127.0.0.1:27017/SCUStudents'); // connect to the database
 
-var app = express();
+var app = express(); // create an express app
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Welcome to SCU Students API");
 });
-//member 6
 
-// Insert student
-app.post('/students/register', async (req, res) =>{
-  try {
-      const student = await Student.create({
-          sid: parseInt(req.body.sid),
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          nearCity: req.body.nearCity,
-          course: req.body.courses,
-          guardian: req.body.guardian,
-          subjects: req.body.subjects
-      })
 
-      if (!student) {
-          res.json({status: 'error', message: "Type a unique id and email"});
-      } else {
-          res.json({status: 'ok', message: "Student inserted!"});
-      }
-  } catch (error) {
-      console.log(error.message);
-      res.json({status: 'error', message: "Type a unique id and email"});
-  }
+  // Add new result to the database
+
+app.post("/results", (req, res) => {
+  const results = new Results(req.body);
+
+  results.save()
+    .then(() => {
+      res.json({
+        message: "New results added successfully."
+      });
+    })
+    .catch((error) => {
+      res.json({
+        message: "Failed to add new results.",
+        error: error.message
+      });
+    });
+});
+
+
+  // Retrieve all results from the database
+
+app.get("/results", (req, res) => {
+  Results.find()
+    .then((results) => {
+      res.status(200).json({
+        message: "Results retrieved successfully.",//response
+        ALL_Results: results // data documents
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Failed to find results.",
+        error: error.message
+      });
+    });
 });
 
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
 });
-
