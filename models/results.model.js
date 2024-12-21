@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
-const Results = new mongoose.Schema(
+// Define the Results schema
+const ResultsSchema = new mongoose.Schema(
     {
-        sid: { type: Number, required: true, unique: true},
+        sid: { type: Number, required: true, unique: true },
         etf: { type: String, required: true },
         wad: { type: String, required: true },
         oop: { type: String, required: true },
@@ -12,6 +13,8 @@ const Results = new mongoose.Schema(
     { collection: 'results' }
 );
 
-const model = mongoose.model('ResultsData', Results);
+// Create the Results model based on the schema
+const Results = mongoose.model('ResultsData', ResultsSchema);
 
-module.exports = model;
+// Export the Results model to be used in other files
+module.exports = Results;
