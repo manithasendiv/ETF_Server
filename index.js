@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Welcome to SCU Students API");
 });
-
+//isum
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
 });
