@@ -32,10 +32,12 @@ app.get("/students/searchFirstName/:searchValue", async (req, res) => {
     if (students.length > 0) {
       res.status(200).json(students);
     } else {
-      res.status(404).json({ message: "Student not found!" });
+      res
+        .status(404)
+        .json({ message: "No students found with that first name" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error finding student", error });
+    res.status(500).json({ message: "Error finding student" });
   }
 });
 
@@ -48,10 +50,10 @@ app.get("/students/searchLastName/:searchValue", async (req, res) => {
     } else {
       res
         .status(404)
-        .json({ message: "No students found with that first name" });
+        .json({ message: "No students found with that last name" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Student not found", error });
+    res.status(500).json({ message: "Student not found" });
   }
 });
 
