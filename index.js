@@ -16,32 +16,20 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-//test one
-
-// Insert student
-app.post('/students/register', async (req, res) =>{
-  try {
-      const student = await Student.create({
-          sid: parseInt(req.body.sid),
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          nearCity: req.body.nearCity,
-          course: req.body.courses,
-          guardian: req.body.guardian,
-          subjects: req.body.subjects
-      })
-
-      if (!student) {
-          res.json({status: 'error', message: "Type a unique id and email"});
-      } else {
-          res.json({status: 'ok', message: "Student inserted!"});
-      }
-  } catch (error) {
-      console.log(error.message);
-      res.json({status: 'error', message: "Type a unique id and email"});
+app.get("students/searchSID/:searchvalue",async(req,res)=>{
+  try{
+    const students = await Student.findOne({sid:req.params.searchvalue}); 
+    if(students.length > 0){
+      res.status(200).json(students);
+    }
+    else{
+      res.status(404).json({message:"No student found with that SID",error});
+    }
   }
-});
+  catch(error){
+    res.status(500).json({message:"Error finding student",error});
+  }
+})
 
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
