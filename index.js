@@ -16,6 +16,38 @@ app.get("/", (req, res) => {
   res.send("Welcome to SCU Students API");
 });
 
+// Find by First name
+app.get("/students/searchFirstName/:searchValue", async (req, res) => {
+  try {
+    const students = await Student.find({ firstName: req.params.searchValue });
+    if (students.length > 0) {
+      res.status(200).json(students);
+    } else {
+      res
+        .status(404)
+        .json({ message: "No students found with that first name" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error finding student" });
+  }
+});
+
+// Find by Last name
+app.get("/students/searchLastName/:searchValue", async (req, res) => {
+  try {
+    const students = await Student.find({ lastName: req.params.searchValue });
+    if (students.length > 0) {
+      res.status(200).json(students);
+    } else {
+      res
+        .status(404)
+        .json({ message: "No students found with that last name" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Student not found" });
+  }
+});
+
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
 });
