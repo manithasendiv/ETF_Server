@@ -25,36 +25,20 @@ app.get("/students", async (req, res) => {
   }
 });
 
-// Find by First name
-app.get("/students/searchFirstName/:searchValue", async (req, res) => {
-  try {
-    const students = await Student.find({ firstName: req.params.searchValue });
-    if (students.length > 0) {
+app.get("/students/searchEmail/:searchValue",async(req,res)=>{
+  try{
+    const students = await Student.find({email:req.params.searchValue}); 
+    if(students.length > 0){
       res.status(200).json(students);
-    } else {
-      res
-        .status(404)
-        .json({ message: "No students found with that first name" });
     }
-  } catch (error) {
-    res.status(500).json({ message: "Error finding student" });
+    else{
+      res.status(404).json({message:"No student found with that Email",error});
+    }
   }
-});
+  catch(error){
+    res.status(500).json({message:"Error finding student",error});
+  }
 
-// Find by Last name
-app.get("/students/searchLastName/:searchValue", async (req, res) => {
-  try {
-    const students = await Student.find({ lastName: req.params.searchValue });
-    if (students.length > 0) {
-      res.status(200).json(students);
-    } else {
-      res
-        .status(404)
-        .json({ message: "No students found with that last name" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Student not found" });
-  }
 });
 
 app.listen(3000, function () {
