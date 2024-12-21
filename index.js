@@ -30,6 +30,13 @@ app.get("/students/searchFirstName/:searchValue", async (req, res) => {
   try {
     const students = await Student.find({ firstName: req.params.searchValue });
     if (students.length > 0) {
+  res.send("Hello world");
+});
+
+app.get("/students/searchSID/:searchValue",async(req,res)=>{
+  try{
+    const students = await Student.find({sid:req.params.searchValue}); 
+    if(students.length > 0){
       res.status(200).json(students);
     } else {
       res
