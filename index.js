@@ -34,7 +34,7 @@ app.get("/students/searchFirstName/:searchValue", async (req, res) => {
     } else {
       res
         .status(404)
-        .json({ message: "No students found with that first name"});
+        .json({ message: "No students found with that first name" });
     }
   } catch (error) {
     res.status(500).json({ message: "Error finding student" });
