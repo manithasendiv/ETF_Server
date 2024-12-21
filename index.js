@@ -16,30 +16,46 @@ app.get("/", (req, res) => {
   res.send("Welcome to SCU Students API");
 });
 
-// Insert student
-app.post('/students/register', async (req, res) =>{
+app.get("/students", async (req, res) => {
   try {
-      const student = await Student.create({
-          sid: parseInt(req.body.sid),
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          nearCity: req.body.nearCity,
-          course: req.body.courses,
-          guardian: req.body.guardian,
-          subjects: req.body.subjects
-      })
-
-      if (!student) {
-          res.json({status: 'error', message: "Type a unique id and email"});
-      } else {
-          res.json({status: 'ok', message: "Student inserted!"});
-      }
+    const students = await Student.find({}); // find all students
+    res.json(students);
   } catch (error) {
-      console.log(error.message);
-      res.json({status: 'error', message: "Type a unique id and email"});
+    console.log(error.message);
   }
-})
+});
+
+// Find by First name
+app.get("/students/searchFirstName/:searchValue", async (req, res) => {
+  try {
+    const students = await Student.find({ firstName: req.params.searchValue });
+    if (students.length > 0) {
+      res.status(200).json(students);
+    } else {
+      res
+        .status(404)
+        .json({ message: "No students found with that first name"});
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error finding student" });
+  }
+});
+
+// Find by Last name
+app.get("/students/searchLastName/:searchValue", async (req, res) => {
+  try {
+    const students = await Student.find({ lastName: req.params.searchValue });
+    if (students.length > 0) {
+      res.status(200).json(students);
+    } else {
+      res
+        .status(404)
+        .json({ message: "No students found with that last name" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Student not found" });
+  }
+});
 
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
