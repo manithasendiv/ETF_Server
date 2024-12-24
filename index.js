@@ -18,26 +18,35 @@ app.get("/", (req, res) => {
 
 //Dulashana
 //Insert a New student
-app.post("/students", async (req, res) => {
-  const { sid, name, age, department } = req.body;
-
-  if (!sid || !name || !age || !department) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
+app.post('/students/register', async (req, res) => {
   try {
-    const newStudent = new Student({ sid, name, age, department });
-    await newStudent.save();
-    res.status(201).json({ message: "Student added successfully", student: newStudent });
-  } catch (err) {
-    res.status(500).json({ message: "Error adding student", error: err.message });
+    const student = await Student.create({
+      sid: parseInt(req.body.sid), // Converting to integer
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      nearCity: req.body.nearCity,
+      course: req.body.courses,
+      guardian: req.body.guardian,
+      subjects: req.body.subjects
+    });
+
+    // Check if student was created successfully
+    if (!student) {
+      return res.json({ status: 'error', message: "Type a unique id and email" });
+    } else {
+      return res.json({ status: 'ok', message: "Student inserted!" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    return res.json({ status: 'error', message: "Type a unique id and email" });
   }
 });
 
 //Show all Students
 app.get("/students", async (req, res) => {
   try {
-    const students = await Student.find(); 
+    const students = await Student.find(); // Fetch all students from the database
     res.status(200).json(students);
   } catch (err) {
     res.status(500).json({ message: "Error fetching students", error: err.message });
