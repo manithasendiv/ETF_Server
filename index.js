@@ -18,30 +18,48 @@ app.get("/", (req, res) => {
 
 //Dulashana
 //Insert a New student
-app.post('/students/register', async (req, res) => {
+app.post("/students", async (req, res) => {
+  // Destructuring the new student fields
+  const { 
+    sid, 
+    firstName, 
+    lastName, 
+    email, 
+    nearCity, 
+    courses, 
+    guardian, 
+    subjects 
+  } = req.body;
+
+  // Check if required fields are provided
+  if (!sid || !firstName || !lastName || !email || !nearCity || !courses || !guardian || !subjects) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
   try {
-    const student = await Student.create({
-      sid: parseInt(req.body.sid), // Converting to integer
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      nearCity: req.body.nearCity,
-      course: req.body.courses,
-      guardian: req.body.guardian,
-      subjects: req.body.subjects
+    // Create a new student instance with the provided details
+    const newStudent = new Student({
+      sid,
+      firstName,
+      lastName,
+      email,
+      nearCity,
+      course: courses, // Renaming 'courses' to 'course' to match the schema
+      guardian,
+      subjects
     });
 
-    // Check if student was created successfully
-    if (!student) {
-      return res.json({ status: 'error', message: "Type a unique id and email" });
-    } else {
-      return res.json({ status: 'ok', message: "Student inserted!" });
-    }
-  } catch (error) {
-    console.log(error.message);
-    return res.json({ status: 'error', message: "Type a unique id and email" });
+    // Save the new student to the database
+    await newStudent.save();
+
+    // Respond with a success message
+    res.status(201).json({ message: "Student added successfully", student: newStudent });
+  } catch (err) {
+    // If an error occurs, respond with an error message
+    res.status(500).json({ message: "Error adding student", error: err.message });
   }
 });
+
 
 //Show all Students
 app.get("/students", async (req, res) => {
