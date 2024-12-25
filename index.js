@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 //Dulashana
 //Insert a New student
-app.post("/students", async (req, res) => {
+app.post("/api/Students", async (req, res) => {
   // Destructuring the new student fields
   const { 
     sid, 
@@ -71,6 +71,7 @@ app.get("/students", async (req, res) => {
   }
 });
 
+
 //Delete Student by sid
 app.delete("/students/:sid", async (req, res) => {
   const { sid } = req.params;
@@ -88,9 +89,11 @@ app.delete("/students/:sid", async (req, res) => {
 
 
 
-
 app.listen(3000, function () {
   console.log("App listening on port 3000!");
 });
+
+
+
 
 // test 11
